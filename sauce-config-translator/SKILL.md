@@ -1,7 +1,14 @@
 ---
 name: sauce-config-translator
-description: Translate plain English instructions into updated Sauce Labs capability blocks. Use when the user wants to modify, reconfigure, or retarget an existing Sauce Labs capability set — for example: "run on latest Chrome", "switch to Android", "use a real device instead of emulator", "add network throttling", or "run on iOS 17 Safari".
-when_to_use: Use when the user provides an existing capability block and a natural language instruction to change it, OR when the user gives only a natural language target (e.g. "run on Android Chrome on Sauce") and needs a ready-to-use capability block generated from scratch.
+description: >
+  Translate plain English instructions into updated Sauce Labs capability
+  blocks. Use when the user wants to modify, reconfigure, or retarget an
+  existing Sauce Labs capability set.
+when_to_use: >
+  Use when the user provides an existing capability block and a natural
+  language instruction to change it, OR when the user gives only a natural
+  language target and needs a ready-to-use capability block generated from
+  scratch.
 ---
 
 # Sauce Labs Config Translator
