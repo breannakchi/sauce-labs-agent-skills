@@ -1,14 +1,9 @@
 ---
 name: sauce-config-translator
 description: >
-  Translate plain English instructions into updated Sauce Labs capability
-  blocks. Use when the user wants to modify, reconfigure, or retarget an
-  existing Sauce Labs capability set.
+  Translate plain English instructions into updated Sauce Labs capability blocks. Use when the user wants to modify, reconfigure, or retarget an existing Sauce Labs capability set.
 when_to_use: >
-  Use when the user provides an existing capability block and a natural
-  language instruction to change it, OR when the user gives only a natural
-  language target and needs a ready-to-use capability block generated from
-  scratch.
+  Use when the user provides an existing capability block and a natural language instruction to change it, OR when the user gives only a natural language target and needs a ready-to-use capability block generated from scratch.
 ---
 
 # Sauce Labs Config Translator
@@ -57,7 +52,7 @@ Extract the user's intent from natural language. Common patterns:
 - "Safari on macOS Sequoia" → `browserName: safari`, `platformName: macOS 15`
 - "run on Android" → `platformName: Android`, remove `browserVersion`
 - "run on iOS 17" → `platformName: iOS`, `appium:platformVersion: 17`
-- "switch to emulator / simulator" → move to VDC, add `appium:platformVersion: "current_major"`, add `appium:deviceName: "iPhone Simulator"` (iOS) or `"Android GoogleAPI Emulator"` (Android), remove `sauce:options.appiumVersion`, remove `resigningEnabled`
+- "switch to emulator / simulator" → move to VDC, add `appium:platformVersion: "current_major"`, add `appium:deviceName: "iPhone Simulator"` (iOS) or `"Google Nexus 4 Emulator"` (Android), remove `sauce:options.appiumVersion`, remove `resigningEnabled`
 - "switch to real device" → move to RDC, remove `appium:platformVersion`, change `deviceName` to `iPhone.*` or `Google.*`, add `sauce:options.resigningEnabled: true`, add `sauce:options.appiumVersion: "latest"`
 
 ### Device targeting
@@ -108,7 +103,7 @@ Extract the user's intent from natural language. Common patterns:
 
 ### If target is VDC mobile (emulator/simulator):
 - Always include `appium:platformVersion: "current_major"` (or specific version string like `"17.0"`)
-- Always include `appium:deviceName` (`"iPhone Simulator"` for iOS, `"Android GoogleAPI Emulator"` for Android)
+- Always include `appium:deviceName` (`"iPhone Simulator"` for iOS, `"Google Nexus 4 Emulator"` for Android)
 - Always include `appium:automationName` (UIAutomator2 for Android, XCUITest for iOS)
 - Do NOT set `resigningEnabled`
 - Do NOT set `sauce:options.appiumVersion`
