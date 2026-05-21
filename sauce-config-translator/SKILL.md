@@ -1,14 +1,7 @@
 ---
 name: sauce-config-translator
-description: >
-  Translate plain English instructions into updated Sauce Labs capability
-  blocks. Use when the user wants to modify, reconfigure, or retarget an
-  existing Sauce Labs capability set.
-when_to_use: >
-  Use when the user provides an existing capability block and a natural
-  language instruction to change it, OR when the user gives only a natural
-  language target and needs a ready-to-use capability block generated from
-  scratch.
+description: Translate plain English instructions into updated Sauce Labs capability blocks. Use when the user wants to modify, reconfigure, or retarget an existing Sauce Labs capability set — for example: "run on latest Chrome", "switch to Android", "use a real device instead of emulator", "add network throttling", or "run on iOS 17 Safari".
+when_to_use: Use when the user provides an existing capability block and a natural language instruction to change it, OR when the user gives only a natural language target (e.g. "run on Android Chrome on Sauce") and needs a ready-to-use capability block generated from scratch.
 ---
 
 # Sauce Labs Config Translator
@@ -57,8 +50,8 @@ Extract the user's intent from natural language. Common patterns:
 - "Safari on macOS Sequoia" → `browserName: safari`, `platformName: macOS 15`
 - "run on Android" → `platformName: Android`, remove `browserVersion`
 - "run on iOS 17" → `platformName: iOS`, `appium:platformVersion: 17`
-- "switch to emulator / simulator" → move to VDC, add `appium:platformVersion` and `appium:deviceName`
-- "switch to real device" → move to RDC, add `resigningEnabled: true`, remove `appium:platformVersion`
+- "switch to emulator / simulator" → move to VDC, add `appium:platformVersion: "current_major"`, add `appium:deviceName: "iPhone Simulator"` (iOS) or `"Android GoogleAPI Emulator"` (Android), remove `sauce:options.appiumVersion`, remove `resigningEnabled`
+- "switch to real device" → move to RDC, remove `appium:platformVersion`, change `deviceName` to `iPhone.*` or `Google.*`, add `sauce:options.resigningEnabled: true`, add `sauce:options.appiumVersion: "latest"`
 
 ### Device targeting
 - "any iPhone" → `appium:deviceName: iPhone.*` (RDC dynamic allocation)
@@ -91,6 +84,7 @@ Extract the user's intent from natural language. Common patterns:
 
 ### If target is RDC (real device):
 - Always include `sauce:options.resigningEnabled: true` when any advanced feature is present
+- Always include `sauce:options.appiumVersion: "latest"` — required for RDC
 - Always use `storage:filename=<name>` for app binaries
 - Do NOT set `browserVersion`
 - Do NOT set `appium:platformVersion` (real device = dynamic allocation)
@@ -106,10 +100,11 @@ Extract the user's intent from natural language. Common patterns:
 - If user requests conflicting options, flag the conflict and ask which they need
 
 ### If target is VDC mobile (emulator/simulator):
-- Always include `appium:platformVersion`
-- Always include `appium:deviceName`
+- Always include `appium:platformVersion: "current_major"` (or specific version string like `"17.0"`)
+- Always include `appium:deviceName` (`"iPhone Simulator"` for iOS, `"Android GoogleAPI Emulator"` for Android)
 - Always include `appium:automationName` (UIAutomator2 for Android, XCUITest for iOS)
 - Do NOT set `resigningEnabled`
+- Do NOT set `sauce:options.appiumVersion`
 
 ## Step 5 — Preserve Existing Values
 
@@ -161,12 +156,13 @@ Run this checklist before returning the result:
 
 ### Example 2 — Switch from emulator to real device
 **User:** "Run this on a real iPhone instead of the simulator"
-**Input caps include:** `platformName: iOS`, `appium:platformVersion: 17`, `appium:deviceName: iPhone 14`
+**Input caps include:** `platformName: iOS`, `appium:platformVersion: current_major`, `appium:deviceName: iPhone Simulator`
 **Output changes:**
-- Remove `appium:platformVersion`
-- Change `appium:deviceName: iPhone.*`
-- Add `sauce:options.resigningEnabled: true`
-- Add note: `# Switched to RDC dynamic allocation — real device does not use platformVersion`
+- Remove `appium:platformVersion` — not used on RDC
+- Change `appium:deviceName: iPhone.*` — RDC dynamic allocation pattern
+- Add `sauce:options.resigningEnabled: true` — required for RDC
+- Add `sauce:options.appiumVersion: "latest"` — required for RDC, not used on simulator
+- Add note: `# Switched to RDC — platformVersion removed, appiumVersion added`
 
 ### Example 3 — Add a feature
 **User:** "Add network throttling to simulate 3G"
